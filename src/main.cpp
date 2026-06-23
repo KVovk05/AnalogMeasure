@@ -1,18 +1,20 @@
 #include <Arduino.h>
 #define ANALOG_PIN 4
-#define ADC_BITS 4095.0
+#define ADC_BITS 10
 #define MCU_VOLTAGE 3.3
 
-
+float decimalOfBits = pow(2, ADC_BITS);
 void setup() {
   Serial.begin(115200);
   pinMode(ANALOG_PIN, INPUT);
+  analogReadResolution(ADC_BITS);
+  analogSetPinAttenuation(ANALOG_PIN, ADC_0db);
 }
 
 void loop() {
   int analogValue = analogRead(ANALOG_PIN);
   float measuredMilivolts = analogReadMilliVolts(ANALOG_PIN);
-  float volts = analogValue / ADC_BITS * MCU_VOLTAGE;
+  float volts = analogValue / decimalOfBits * MCU_VOLTAGE;
 
   Serial.println("---------");
   Serial.print("Raw analog value: ");
